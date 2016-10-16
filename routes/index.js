@@ -143,7 +143,7 @@ router.post('/v1/list/:id', function(req, res, next) {
       console.log("Success");
       res.writeHead(200, {'Content-Type': 'text/plain'});
       var items = JSON.parse(body).list.items;
-      res.end(items.toString());
+      res.end(JSON.stringify(items));
     }
     else {
       console.log("Failed");
