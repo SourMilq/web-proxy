@@ -81,11 +81,53 @@ router.post('/v1/lists', function(req, res, next) {
   });
 });
 
-router.post('/v1/list/', function(req, res, next) {
+router.post('/v1/list/:id/item/add', function(req, res, next) {
   var formdata = req.body;
   var path = req.originalUrl;
-  var id = formdata.id;
-  var url = base_url + path + id;
+
+  var url = base_url + path;
+
+  var token = 'Bearer ' + formdata.token;
+
+  var itemName = formdata.name;
+  var itemPrice = formdata.price;
+  var itemQuantity = formdata.quantity;
+
+  var data = {
+    "listId": req.params.id,
+    "item":{
+      "name": itemName,
+      "quantity": itemPrice,
+      "price": itemQuantity
+    }
+  };
+
+  request({
+    headers: {
+      'Content-Type': 'application/json;charset=utf-8',
+      'Authorization' : token
+    },
+    body: JSON.stringify(data),
+    uri: url,
+    method: 'POST'
+  }, function (err, res2, body) {
+    if(!err) {
+      console.log("Success");
+      res.writeHead(200, {'Content-Type': 'text/plain'});
+      res.end();
+    }
+    else {
+      console.log("Failed");
+      res.status(500).send(err);
+    }
+  });
+});
+
+router.post('/v1/list/:id', function(req, res, next) {
+  var formdata = req.body;
+  var path = req.originalUrl;
+
+  var url = base_url + path;
 
   var token = 'Bearer ' + formdata.token;
 
