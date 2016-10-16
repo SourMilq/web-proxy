@@ -114,7 +114,37 @@ router.post('/v1/list/:id/item/add', function(req, res, next) {
     if(!err) {
       console.log("Success");
       res.writeHead(200, {'Content-Type': 'text/plain'});
-      res.end();
+      var items = JSON.parse(body).list.items;
+      res.end(JSON.stringify(items));
+    }
+    else {
+      console.log("Failed");
+      res.status(500).send(err);
+    }
+  });
+});
+
+router.post('/v1/list/:listid/item/:itemid', function(req, res, next) {
+  var formdata = req.body;
+  var path = req.originalUrl;
+
+  var url = base_url + path;
+
+  var token = 'Bearer ' + formdata.token;
+
+  request({
+    headers: {
+      'Content-Type': 'application/json;charset=utf-8',
+      'Authorization' : token
+    },
+    uri: url,
+    method: 'DELETE'
+  }, function (err, res2, body) {
+    if(!err) {
+      console.log("Success");
+      res.writeHead(200, {'Content-Type': 'text/plain'});
+      var items = JSON.parse(body).list.items;
+      res.end(JSON.stringify(items));
     }
     else {
       console.log("Failed");
