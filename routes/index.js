@@ -1,10 +1,9 @@
 var express = require('express');
+var request = require('request');
 
 var router = express.Router();
 
-var request = require('request');
-
-var base_url = "http://f3a5a098.ngrok.io/";
+var base_url = "http://f3a5a098.ngrok.io";
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -13,25 +12,36 @@ router.get('/', function(req, res, next) {
 
 router.post('/v1/user/create', function(req, res, next) {
   var formdata = req.body;
+  var path = req.originalUrl;
+  var url = base_url + path;
+
+  var data = {
+    "first_name": formdata.first_name,
+    "last_name": formdata.last_name,
+    "email": formdata.email,
+    "username": formdata.username,
+    "password": formdata.password
+  }
 
   request({
     headers: {
       'Content-Type': 'application/json;charset=utf-8'
     },
-    uri: base_url + '/v1/user/create',
-    body: formdata,
+    uri: url,
+    body: JSON.stringify(data),
     method: 'POST'
-  }, function (err, res, body) {
+  }, function (err, res2, body) {
     if(!err) {
-      res.send(body.getData());
+      console.log("Success");
+      res.writeHead(200, {'Content-Type': 'text/plain'});
+      res.end(body);
     }
     else {
-      console.log("Test");
+      console.log("Failed");
+      res.status(500).send(err);
     }
 
   });
-
-  res.render('index', { title: 'Express' });
 });
 
 router.get('/get', function(req, res, next) {
