@@ -31,7 +31,7 @@ router.post('/v1/user', function(req, res, next) {
     body: JSON.stringify(data),
     method: 'POST'
   }, function (err, res2, body) {
-    if(!err) {
+    if(!err && res2.statusCode == 200) {
       console.log("Success");
       res.writeHead(200, {'Content-Type': 'text/plain'});
       res.end(body);
@@ -60,7 +60,7 @@ router.post('/v1/lists', function(req, res, next) {
     uri: url,
     method: 'GET'
   }, function (err, res2, body) {
-    if(!err) {
+    if(!err && res2.statusCode == 200) {
       console.log("Success");
       res.writeHead(200, {'Content-Type': 'text/plain'});
       var json = JSON.parse(body);
@@ -111,7 +111,7 @@ router.post('/v1/list/:id/item/add', function(req, res, next) {
     uri: url,
     method: 'POST'
   }, function (err, res2, body) {
-    if(!err) {
+    if(!err && res2.statusCode == 200) {
       console.log("Success");
       res.writeHead(200, {'Content-Type': 'text/plain'});
       var items = JSON.parse(body).list.items;
@@ -140,7 +140,7 @@ router.post('/v1/list/:listid/item/:itemid', function(req, res, next) {
     uri: url,
     method: 'DELETE'
   }, function (err, res2, body) {
-    if(!err) {
+    if(!err && res2.statusCode == 200) {
       console.log("Success");
       res.writeHead(200, {'Content-Type': 'text/plain'});
       var items = JSON.parse(body).list.items;
@@ -169,7 +169,7 @@ router.post('/v1/list/:id', function(req, res, next) {
     uri: url,
     method: 'GET'
   }, function (err, res2, body) {
-    if(!err) {
+    if(!err && res2.statusCode == 200 ) {
       console.log("Success");
       res.writeHead(200, {'Content-Type': 'text/plain'});
       var items = JSON.parse(body).list.items;
@@ -203,7 +203,7 @@ router.post('/v1/user/create', function(req, res, next) {
     body: JSON.stringify(data),
     method: 'POST'
   }, function (err, res2, body) {
-    if(!err) {
+    if(!err && res2.statusCode == 200) {
       console.log("Success");
       res.writeHead(200, {'Content-Type': 'text/plain'});
       res.end(body);
