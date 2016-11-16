@@ -3,7 +3,7 @@ var request = require('request');
 
 var router = express.Router();
 
-var base_url = "http://4dd95a2a.ngrok.io";
+var base_url = "http://ec2-35-163-95-143.us-west-2.compute.amazonaws.com:3000";
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -38,6 +38,8 @@ router.post('/v1/user', function(req, res, next) {
     }
     else {
       console.log("Failed");
+      console.log(err);
+      console.log(res2.statusCode == 200);
       res.status(500).send(err);
     }
   });
@@ -177,6 +179,7 @@ router.post('/v1/list/:id', function(req, res, next) {
     }
     else {
       console.log("Failed");
+      console.log(err);
       res.status(500).send(err);
     }
   });
@@ -210,6 +213,7 @@ router.post('/v1/user/create', function(req, res, next) {
     }
     else {
       console.log("Failed");
+      console.log(err);
       res.status(500).send(err);
     }
 
