@@ -39,7 +39,6 @@ router.post('/v1/user', function(req, res, next) {
     else {
       console.log("Failed");
       console.log(err);
-      console.log(res2.statusCode == 200);
       res.status(500).send(err);
     }
   });
@@ -68,12 +67,8 @@ router.post('/v1/lists', function(req, res, next) {
       var json = JSON.parse(body);
       var lists = json.lists;
       var id = -1;
-      for(var i = 0; i < lists.length; i++) {
-        if (lists[i].name == "Grocery List") {
-            id = lists[i].id;
-        }
-      }
-      res.end(id.toString());
+      
+      res.end(JSON.stringify(lists));
     }
     else {
       console.log("Failed");
