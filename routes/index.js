@@ -67,7 +67,7 @@ router.post('/v1/lists', function(req, res, next) {
       var json = JSON.parse(body);
       var lists = json.lists;
       var id = -1;
-      
+
       res.end(JSON.stringify(lists));
     }
     else {
@@ -75,6 +75,70 @@ router.post('/v1/lists', function(req, res, next) {
       res.status(500).send(err);
     }
 
+  });
+});
+
+router.post('/v1/list/:id/item/:itemid/done', function(req, res, next) {
+  var formdata = req.body;
+  var path = req.originalUrl;
+
+  var url = base_url + path;
+
+  var token = 'Bearer ' + formdata.token;
+
+  request({
+    headers: {
+      'Content-Type': 'application/json;charset=utf-8',
+      'Authorization' : token
+    },
+    uri: url,
+    method: 'POST'
+  }, function (err, res2, body) {
+    if(!err && res2.statusCode == 200) {
+      console.log("Success");
+      res.writeHead(200, {'Content-Type': 'text/plain'});
+      var items = JSON.parse(body).list.items;
+      res.end(JSON.stringify(items));
+    }
+    else {
+      console.log("Failed");
+      res.status(500).send(err);
+    }
+  });
+});
+
+router.post('/v1/list/:id/item/:itemid/update', function(req, res, next) {
+  var formdata = req.body;
+  var path = req.originalUrl;
+
+  var url = base_url + path;
+
+  var token = 'Bearer ' + formdata.token;
+  var expiration = formdata.expiration;
+
+  var data = {
+    'expiration' : expiration
+  }
+
+  request({
+    headers: {
+      'Content-Type': 'application/json;charset=utf-8',
+      'Authorization' : token
+    },
+    body: JSON.stringify(data),
+    uri: url,
+    method: 'POST'
+  }, function (err, res2, body) {
+    if(!err && res2.statusCode == 200) {
+      console.log("Success");
+      res.writeHead(200, {'Content-Type': 'text/plain'});
+      var items = JSON.parse(body).list.items;
+      res.end(JSON.stringify(items));
+    }
+    else {
+      console.log("Failed");
+      res.status(500).send(err);
+    }
   });
 });
 
@@ -89,13 +153,15 @@ router.post('/v1/list/:id/item/add', function(req, res, next) {
   var itemName = formdata.name;
   var itemPrice = formdata.price;
   var itemQuantity = formdata.quantity;
+  var itemExpiration = formdata.expiration;
 
   var data = {
     "listId": req.params.id,
     "item":{
       "name": itemName,
       "quantity": itemPrice,
-      "price": itemQuantity
+      "price": itemQuantity,
+      "expiration" : itemExpiration
     }
   };
 
