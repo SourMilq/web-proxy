@@ -42,9 +42,65 @@ router.post('/v1/user', function(req, res, next) {
       res.status(500).send(err);
     }
   });
-
 });
 
+router.post('/v1/recipe/suggest', function(req, res, next) {
+  var formdata = req.body;
+  var path = req.originalUrl;
+  var paramString = "?q=" + formdata.percentage;
+  var url = base_url + path + paramString;
+
+  var token = 'Bearer ' + formdata.token;
+
+  request({
+    headers: {
+      'Content-Type': 'application/json;charset=utf-8',
+      'Authorization' : token
+    },
+    uri: url,
+    method: 'GET'
+  }, function (err, res2, body) {
+    if(!err && res2.statusCode == 200) {
+      console.log("Success");
+      res.writeHead(200, {'Content-Type': 'text/plain'});
+      var items = JSON.parse(body).recipes;
+      res.end(JSON.stringify(items));
+    }
+    else {
+      console.log("Failed");
+      res.status(500).send(err);
+    }
+  });
+});
+
+router.post('/v1/recipe', function(req, res, next) {
+  var formdata = req.body;
+  var path = req.originalUrl;
+  var offsetString = "?limit=10&offset=" + formdata.offset;
+  var url = base_url + path + offsetString;
+
+  var token = 'Bearer ' + formdata.token;
+
+  request({
+    headers: {
+      'Content-Type': 'application/json;charset=utf-8',
+      'Authorization' : token
+    },
+    uri: url,
+    method: 'GET'
+  }, function (err, res2, body) {
+    if(!err && res2.statusCode == 200) {
+      console.log("Success");
+      res.writeHead(200, {'Content-Type': 'text/plain'});
+      var items = JSON.parse(body).recipes;
+      res.end(JSON.stringify(items));
+    }
+    else {
+      console.log("Failed");
+      res.status(500).send(err);
+    }
+  });
+});
 
 router.post('/v1/lists', function(req, res, next) {
   var formdata = req.body;
@@ -134,6 +190,36 @@ router.post('/v1/list/:id/item/:itemid/update', function(req, res, next) {
       res.writeHead(200, {'Content-Type': 'text/plain'});
       var items = JSON.parse(body).list.items;
       res.end(JSON.stringify(items));
+    }
+    else {
+      console.log("Failed");
+      res.status(500).send(err);
+    }
+  });
+});
+
+router.post('/v1/recipe/:id/add', function(req, res, next) {
+  var formdata = req.body;
+  var path = req.originalUrl;
+
+  var url = base_url + path;
+
+  var token = 'Bearer ' + formdata.token;
+
+  request({
+    headers: {
+      'Content-Type': 'application/json;charset=utf-8',
+      'Authorization' : token
+    },
+    uri: url,
+    method: 'GET'
+  }, function (err, res2, body) {
+    if(!err && res2.statusCode == 200) {
+      console.log("Success");
+      res.writeHead(200, {'Content-Type': 'text/plain'});
+      res.end();
+      //var items = JSON.parse(body).list.items;
+      //res.end(JSON.stringify(items));
     }
     else {
       console.log("Failed");
